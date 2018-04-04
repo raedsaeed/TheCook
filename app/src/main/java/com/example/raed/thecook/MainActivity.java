@@ -5,11 +5,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.raed.thecook.data.Ingredient;
+import com.example.raed.thecook.data.Recipe;
+import com.example.raed.thecook.data.Step;
+import com.example.raed.thecook.network.NetworkManager;
+
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements NetworkManager.CompletedRequest{
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +27,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        NetworkManager manager = NetworkManager.getInstance(this);
+        manager.getData();
     }
 
     @Override
@@ -48,5 +51,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCompletedRequest(List<Recipe> recipes) {
+        for (int i=0; i<recipes.size(); i++) {
+            Log.d(TAG, "onCompletedRequest: " + recipes.get(i).getName());
+            List<Ingredient> ingredients = recipes.get(i).getIngredients();
+            for (int j=0;j<ingredients.size(); j++) {
+                Log.d(TAG, "onCompletedRequest: ingredient" + ingredients.get(j).getIngredient());
+            }
+            List<Step> steps = recipes.get(i).getSteps();
+            for(int m=0; m<steps.size(); m++) {
+                Log.d(TAG, "onCompletedRequest: " + steps.get(m).getShortDescription());
+            }
+        }
     }
 }
