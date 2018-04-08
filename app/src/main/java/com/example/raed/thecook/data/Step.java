@@ -2,6 +2,7 @@ package com.example.raed.thecook.data;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +15,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "steps", foreignKeys = @ForeignKey(entity = Recipe.class,
         parentColumns = "id",
-        childColumns = "recipeId", onDelete = CASCADE))
+        childColumns = "recipeId", onDelete = CASCADE),
+        indices = @Index(value = "recipeId", unique = true))
 public class Step implements Parcelable {
     @PrimaryKey
     private int id;
