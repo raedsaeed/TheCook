@@ -1,16 +1,27 @@
 package com.example.raed.thecook.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by raed on 4/3/18.
  */
 
-public class Ingredient implements Parcelable{
+@Entity(tableName = "ingredient", foreignKeys = @ForeignKey(entity = Recipe.class,
+        parentColumns = "id",
+        childColumns = "recipeId", onDelete = CASCADE))
+public class Ingredient implements Parcelable {
+    @PrimaryKey
     private double quantity;
     private String measure;
     private String ingredient;
+    private int recipeId;
 
     public Ingredient(double quantity, String measure, String ingredient) {
         this.quantity = quantity;
@@ -48,6 +59,13 @@ public class Ingredient implements Parcelable{
         return ingredient;
     }
 
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
 
     @Override
     public int describeContents() {

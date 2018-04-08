@@ -1,18 +1,28 @@
 package com.example.raed.thecook.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by raed on 4/3/18.
  */
 
+@Entity(tableName = "steps", foreignKeys = @ForeignKey(entity = Recipe.class,
+        parentColumns = "id",
+        childColumns = "recipeId", onDelete = CASCADE))
 public class Step implements Parcelable {
+    @PrimaryKey
     private int id;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
+    private int recipeId;
 
     public Step(int id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         this.id = id;
@@ -42,7 +52,15 @@ public class Step implements Parcelable {
         return thumbnailURL;
     }
 
-    private Step (Parcel parcel) {
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    private Step(Parcel parcel) {
         id = parcel.readInt();
         shortDescription = parcel.readString();
         description = parcel.readString();
@@ -64,7 +82,7 @@ public class Step implements Parcelable {
         parcel.writeString(thumbnailURL);
     }
 
-    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step> () {
+    public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
         @Override
         public Step createFromParcel(Parcel parcel) {
             return new Step(parcel);

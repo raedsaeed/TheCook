@@ -1,18 +1,15 @@
 package com.example.raed.thecook;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.raed.thecook.data.Ingredient;
 import com.example.raed.thecook.data.Recipe;
-import com.example.raed.thecook.data.Step;
+import com.example.raed.thecook.data.local.RecipeDatabase;
 import com.example.raed.thecook.network.NetworkManager;
 
 import java.util.List;
@@ -55,15 +52,18 @@ public class MainActivity extends AppCompatActivity implements NetworkManager.Co
 
     @Override
     public void onCompletedRequest(List<Recipe> recipes) {
-        for (int i=0; i<recipes.size(); i++) {
-            Log.d(TAG, "onCompletedRequest: " + recipes.get(i).getName());
-            List<Ingredient> ingredients = recipes.get(i).getIngredients();
-            for (int j=0;j<ingredients.size(); j++) {
-                Log.d(TAG, "onCompletedRequest: ingredient" + ingredients.get(j).getIngredient());
-            }
-            List<Step> steps = recipes.get(i).getSteps();
-            for(int m=0; m<steps.size(); m++) {
-                Log.d(TAG, "onCompletedRequest: " + steps.get(m).getShortDescription());
+        RecipeDatabase.getInstance(this).getFullRecipeDoa().addRecipes(recipes);
+
+        List<Ingredient> ingredients = RecipeDatabase.getInstance(this).getFullRecipeDoa().getAllIngredients(2);
+
+        for (int i=0; i<ingredients.size(); i++) {
+                Log.d(TAG, "onCompletedRequest: " + ingredients.get(i).getIngredient());
+        }
+
+        List<Recipe> recipeList = RecipeDatabase.getInstance(this).getFullRecipeDoa().getRecipes();
+        for (Recipe recipe :recipeList) {
+            for (int i=0; i<recipe.getSteps().size(); i++){
+                Log.d(TAG, "onCompletedRequest: " + recipe.getSteps().get(i).getDescription());
             }
         }
     }
