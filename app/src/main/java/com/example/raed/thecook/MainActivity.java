@@ -2,6 +2,8 @@ package com.example.raed.thecook;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,8 +16,10 @@ import com.example.raed.thecook.network.NetworkManager;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NetworkManager.CompletedRequest{
+public class MainActivity extends AppCompatActivity implements MainContract.View{
     private static final String TAG = "MainActivity";
+    RecipeAdapter adapter;
+    MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +28,14 @@ public class MainActivity extends AppCompatActivity implements NetworkManager.Co
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NetworkManager manager = NetworkManager.getInstance(this);
-        manager.getData();
+        presenter = new MainPresenter(this);
+        presenter.fetechData();
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recipe_list);
+        adapter = new RecipeAdapter(this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -51,20 +61,12 @@ public class MainActivity extends AppCompatActivity implements NetworkManager.Co
     }
 
     @Override
-    public void onCompletedRequest(List<Recipe> recipes) {
-        RecipeDatabase.getInstance(this).getFullRecipeDoa().addRecipes(recipes);
+    public void showData(List<Recipe> recipes) {
+        adapter.loadData (recipes);
+    }
 
-        List<Ingredient> ingredients = RecipeDatabase.getInstance(this).getFullRecipeDoa().getAllIngredients(2);
+    @Override
+    public void turnToLandscape() {
 
-        for (int i=0; i<ingredients.size(); i++) {
-                Log.d(TAG, "onCompletedRequest: " + ingredients.get(i).getIngredient());
-        }
-
-        List<Recipe> recipeList = RecipeDatabase.getInstance(this).getFullRecipeDoa().getRecipes();
-        for (Recipe recipe :recipeList) {
-            for (int i=0; i<recipe.getSteps().size(); i++){
-                Log.d(TAG, "onCompletedRequest: " + recipe.getSteps().get(i).getDescription());
-            }
-        }
     }
 }
