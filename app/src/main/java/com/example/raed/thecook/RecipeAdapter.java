@@ -1,6 +1,7 @@
 package com.example.raed.thecook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.raed.thecook.data.Recipe;
+import com.example.raed.thecook.stepActivity.StepActivity;
 
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeItem
         notifyDataSetChanged();
     }
 
-    class RecipeItemViewHolder extends RecyclerView.ViewHolder {
+    class RecipeItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView recipeName;
         ImageView recipeImage;
 
@@ -58,6 +60,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeItem
             super(itemView);
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
+            recipeName.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Recipe recipe = recipeList.get(position);
+            Intent intent = new Intent(context, StepActivity.class);
+            intent.putExtra(StepActivity.EXTRA_RECIPE, recipe);
+            context.startActivity(intent);
         }
     }
 }
