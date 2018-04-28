@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -51,5 +50,6 @@ public class StepActivity extends AppCompatActivity implements StepContract.View
     @Override
     public void showSteps(List<Step> steps) {
         adapter.loadSteps(steps);
+        adapter.setIngredients(recipe.getIngredients());
     }
 }

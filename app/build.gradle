@@ -42,4 +42,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     implementation 'com.android.support:cardview-v7:26.1.0'
+
+    //Exo player dependency
+    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
 }
