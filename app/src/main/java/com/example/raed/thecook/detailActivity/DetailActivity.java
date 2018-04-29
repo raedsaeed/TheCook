@@ -2,6 +2,7 @@ package com.example.raed.thecook.detailActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +20,12 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class DetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        playerView = (SimpleExoPlayerView) findViewById(R.id.video_view);
+        playerView = (SimpleExoPlayerView)findViewById(R.id.video_view);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -56,7 +57,23 @@ public class DetailActivity extends AppCompatActivity {
             step = intent.getParcelableExtra(EXTRA_STEP);
             String url = step.getVideoURL();
             Log.d(TAG, "onCreate: " + url);
-            initializePlayer(Uri.parse(url));
+//            initializePlayer(Uri.parse(url));
+            FragmentManager manager = getSupportFragmentManager();
+            Player player = new Player();
+            Bundle bundle = new Bundle();
+            bundle.putString("uri", step.getVideoURL());
+            player.setArguments(bundle);
+            manager.beginTransaction()
+                    .replace(R.id.video_part_holder, player)
+                    .commit();
+
+
+            IngredientsDetails ingredientsDetails = new IngredientsDetails();
+            bundle.putParcelableArrayList("ingredients", (ArrayList<Ingredient>)ingredients);
+            ingredientsDetails.setArguments(bundle);
+            manager.beginTransaction()
+                    .replace(R.id.ingredient_list_holder, ingredientsDetails)
+                    .commit();
         }
 
     }
