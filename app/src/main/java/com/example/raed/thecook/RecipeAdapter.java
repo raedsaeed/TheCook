@@ -37,14 +37,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeItem
         if (recipeList != null) {
             Recipe recipe = recipeList.get(position);
             holder.recipeName.setText(recipe.getName());
-        }else {
-            holder.recipeName.setText("No Recipes Found");
         }
     }
 
     @Override
     public int getItemCount() {
-        return (recipeList == null) ? 1 : recipeList.size();
+        return (recipeList == null) ? 0 : recipeList.size();
     }
 
     public void loadData (List<Recipe> recipes) {
@@ -61,15 +59,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeItem
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeName = itemView.findViewById(R.id.recipe_name);
             recipeName.setOnClickListener(this);
+            recipeImage.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            int position = getAdapterPosition();
-            Recipe recipe = recipeList.get(position);
-            Intent intent = new Intent(context, StepActivity.class);
-            intent.putExtra(StepActivity.EXTRA_RECIPE, recipe);
-            context.startActivity(intent);
+            switch (view.getId()) {
+                case R.id.recipe_image:
+                case R.id.recipe_name:
+                    int position = getAdapterPosition();
+                    Recipe recipe = recipeList.get(position);
+                    Intent intent = new Intent(context, StepActivity.class);
+                    intent.putExtra(StepActivity.EXTRA_RECIPE, recipe);
+                    context.startActivity(intent);
+                    break;
+                    default:
+                        throw new IllegalArgumentException("Please check your id !!");
+            }
         }
     }
 }

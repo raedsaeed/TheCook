@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import com.example.raed.thecook.R;
 import com.example.raed.thecook.data.Ingredient;
 
 import java.util.List;
+
+import cz.intik.overflowindicator.OverflowPagerIndicator;
+import cz.intik.overflowindicator.SimpleSnapHelper;
 
 /**
  * Created by raed on 4/29/18.
@@ -41,6 +46,10 @@ public class IngredientsDetails extends Fragment {
         LinearLayoutManager horizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalManager);
         recyclerView.setAdapter(adapter);
+        OverflowPagerIndicator indicator = view.findViewById(R.id.view_pager_indicator);
+        SimpleSnapHelper snapHelper = new SimpleSnapHelper(indicator);
+        indicator.attachToRecyclerView(recyclerView);
+        snapHelper.attachToRecyclerView(recyclerView);
         return view;
     }
 

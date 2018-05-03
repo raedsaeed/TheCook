@@ -4,4 +4,7 @@
     <string name="recipe_image">Recipe Image</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_detail2">DetailActivity2</string>
+    <string name="no_connection">No Connection!! Please Check your WiFi!</string>
+    <string name="ingredient">Ingredients</string>
+    <string name="empty_ingredient">No Ingredient Found</string>
 </resources>

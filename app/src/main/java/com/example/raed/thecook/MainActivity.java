@@ -1,5 +1,9 @@
 package com.example.raed.thecook;
 
+import android.app.usage.NetworkStatsManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.raed.thecook.data.Ingredient;
 import com.example.raed.thecook.data.Recipe;
@@ -16,7 +22,7 @@ import com.example.raed.thecook.network.NetworkManager;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View{
+public class MainActivity extends AppCompatActivity implements MainContract.View, View.OnClickListener{
     private static final String TAG = "MainActivity";
     RecipeAdapter adapter;
     MainPresenter presenter;
@@ -29,13 +35,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setSupportActionBar(toolbar);
 
         presenter = new MainPresenter(this);
-        presenter.fetechData();
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recipe_list);
         adapter = new RecipeAdapter(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkNetwork()) {
+            presenter.fetechData();
+
+        }else {
+            findViewById(R.id.recipe_list).setVisibility(View.GONE);
+            findViewById(R.id.connection_image).setOnClickListener(this);
+            findViewById(R.id.connection_image).setVisibility(View.VISIBLE);
+            findViewById(R.id.connection_text).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -68,5 +87,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void turnToLandscape() {
 
+    }
+
+    private boolean checkNetwork () {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.connection_image:
+                if (checkNetwork()) {
+                    presenter.fetechData();
+                    findViewById(R.id.recipe_list).setVisibility(View.VISIBLE);
+                    findViewById(R.id.connection_image).setVisibility(View.GONE);
+                    findViewById(R.id.connection_text).setVisibility(View.GONE);
+                }
+                break;
+                default:
+                    throw new IllegalArgumentException("Wrong Id");
+
+        }
     }
 }

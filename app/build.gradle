@@ -45,4 +45,7 @@ dependencies {
 
     //Exo player dependency
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+
+    //Indicator dependency
+    implementation 'cz.intik:overflow-pager-indicator:1.2.1'
 }

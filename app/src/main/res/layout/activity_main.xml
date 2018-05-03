@@ -21,5 +21,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/recipe_part"/>
+    <include layout="@layout/connection_failure"/>
 
 </android.support.design.widget.CoordinatorLayout>

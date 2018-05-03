@@ -35,9 +35,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     public void onBindViewHolder(IngredientItemHolder holder, int position) {
         if (ingredientList != null) {
             Ingredient ingredient = ingredientList.get(position);
-            holder.textView.setText(ingredient.getIngredient());
+            holder.ingredient.setText(ingredient.getIngredient());
+            holder.measure.setText(ingredient.getMeasure());
+            holder.quantity.setText(new StringBuilder("").append(ingredient.getQuantity()));
         }else {
-            holder.textView.setText("No Ingredient Found");
+            holder.quantity.setText(R.string.empty_ingredient);
         }
     }
 
@@ -52,10 +54,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     }
 
     class IngredientItemHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView quantity, measure, ingredient ;
         public IngredientItemHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.quntity);
+            quantity = itemView.findViewById(R.id.quantity);
+            measure = itemView.findViewById(R.id.measure);
+            ingredient = itemView.findViewById(R.id.ingredient);
         }
     }
 }
