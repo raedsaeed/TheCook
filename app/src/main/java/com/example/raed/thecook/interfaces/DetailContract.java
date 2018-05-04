@@ -1,4 +1,4 @@
-package com.example.raed.thecook.detailActivity;
+package com.example.raed.thecook.interfaces;
 
 import android.net.Uri;
 

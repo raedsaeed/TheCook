@@ -24,8 +24,8 @@ import cz.intik.overflowindicator.SimpleSnapHelper;
  * Created by raed on 4/29/18.
  */
 
-public class IngredientsDetails extends Fragment {
-    private static final String TAG = "IngredientsDetails";
+public class IngredientDetailFragment extends Fragment {
+    private static final String TAG = "IngredientDetailFragment";
     private Context context;
     RecyclerView recyclerView;
     IngredientAdapter adapter;
@@ -50,6 +50,7 @@ public class IngredientsDetails extends Fragment {
         SimpleSnapHelper snapHelper = new SimpleSnapHelper(indicator);
         indicator.attachToRecyclerView(recyclerView);
         snapHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setNestedScrollingEnabled(false);
         return view;
     }
 

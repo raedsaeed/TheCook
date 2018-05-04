@@ -1,9 +1,7 @@
 package com.example.raed.thecook;
 
-import android.app.usage.NetworkStatsManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.raed.thecook.data.Ingredient;
 import com.example.raed.thecook.data.Recipe;
