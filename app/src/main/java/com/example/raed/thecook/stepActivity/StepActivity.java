@@ -40,7 +40,9 @@ public class StepActivity extends AppCompatActivity {
 
         if (findViewById(R.id.land_step_list_holder) != null) {
             showInLandscape();
-        }else {
+        }else if (findViewById(R.id.tablet_land_step_holder) != null) {
+            showInTabletLand();
+        } else{
             showInPortrait();
         }
     }
@@ -74,5 +76,20 @@ public class StepActivity extends AppCompatActivity {
                 .replace(R.id.step_list_holder, fragment)
                 .commit();
 
+    }
+
+    private void showInTabletLand () {
+        Intent intent = getIntent();
+        recipe = intent.getParcelableExtra(EXTRA_RECIPE);
+        FragmentManager manager = getSupportFragmentManager();
+        StepFragment fragment = new StepFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("steps_list", (ArrayList<Step>) recipe.getSteps());
+        bundle.putParcelableArrayList("ingredients_list", (ArrayList<Ingredient>) recipe.getIngredients());
+        bundle.putInt(StepFragment.TABLET_MODE, 2);
+        fragment.setArguments(bundle);
+        manager.beginTransaction()
+                .replace(R.id.tablet_land_step_holder, fragment)
+                .commit();
     }
 }

@@ -24,6 +24,11 @@ import java.util.List;
 public class StepFragment extends Fragment {
     private static final String TAG = "StepFragment";
     public static final String IS_LAND = "landscape";
+    public static final String TABLET_MODE = "tabletMode";
+
+    private static final int PORTRAIT_MODE = 0;
+    private static final int LANDSCAPE_MODE = 1;
+    private static final int TABLET_LAND_MODE = 2;
     RecyclerView recyclerView;
     StepAdapter adapter;
     Context context;
@@ -50,7 +55,13 @@ public class StepFragment extends Fragment {
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setAdapter(adapter);
 
-        } else {
+        } else if (bundle.getInt(TABLET_MODE) == TABLET_LAND_MODE) {
+            adapter.setMode(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(adapter);
+
+        } else{
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);

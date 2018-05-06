@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:fontFamily="casual"
+        android:text="@string/ingredient"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/ingredients_list"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/ingredient" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ingredients_list"
@@ -25,19 +25,32 @@
         android:layout_margin="8dp"
         android:clipToPadding="false"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@id/view_pager_indicator"
+        app:layout_constraintBottom_toTopOf="@id/step_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ingredient_label" />
 
-    <cz.intik.overflowindicator.OverflowPagerIndicator
-        android:id="@+id/view_pager_indicator"
-        android:layout_width="wrap_content"
+    <!--<cz.intik.overflowindicator.OverflowPagerIndicator-->
+        <!--android:id="@+id/view_pager_indicator"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal|bottom"-->
+        <!--android:background="@color/colorPrimaryDark"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/step_description"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/ingredients_list" />-->
+
+    <TextView
+        android:id="@+id/step_description"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@color/colorPrimaryDark"
+        android:layout_margin="8dp"
+        android:fontFamily="casual"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ingredients_list" />
+        app:layout_constraintTop_toBottomOf="@id/ingredients_list"
+        tool:text="Some TExt Some TExt" />
 </android.support.constraint.ConstraintLayout>

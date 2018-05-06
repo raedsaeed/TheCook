@@ -1,4 +1,4 @@
-package com.example.raed.thecook;
+package com.example.raed.thecook.mainActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.raed.thecook.R;
 import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.stepActivity.StepActivity;
 

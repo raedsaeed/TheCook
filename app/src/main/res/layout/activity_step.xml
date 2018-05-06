@@ -39,6 +39,4 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <!--<include layout="@layout/steps_part" />-->
-
 </android.support.design.widget.CoordinatorLayout>

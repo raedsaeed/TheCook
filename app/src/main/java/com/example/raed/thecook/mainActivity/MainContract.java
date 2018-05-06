@@ -1,4 +1,4 @@
-package com.example.raed.thecook;
+package com.example.raed.thecook.mainActivity;
 
 import com.example.raed.thecook.data.Recipe;
 
