@@ -6,16 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.raed.thecook.R;
-import com.example.raed.thecook.data.Ingredient;
-import com.example.raed.thecook.data.Step;
-
-import java.util.List;
+import com.example.raed.thecook.data.Recipe;
 
 /**
  * Created by raed on 5/4/18.
@@ -23,12 +19,15 @@ import java.util.List;
 
 public class StepFragment extends Fragment {
     private static final String TAG = "StepFragment";
-    public static final String IS_LAND = "landscape";
+    public static final String MODE = "mode";
+    public static final String LAND_MODE_KEY = "landscape";
+    public static final String PORTRAIT_MODE_KEY = "portrait";
     public static final String TABLET_MODE = "tabletMode";
+    public static final String RECIPE_KEY = "recipe";
 
-    private static final int PORTRAIT_MODE = 0;
-    private static final int LANDSCAPE_MODE = 1;
-    private static final int TABLET_LAND_MODE = 2;
+    public static final int PORTRAIT_MODE = 0;
+    public static final int LANDSCAPE_MODE = 1;
+    public static final int TABLET_LAND_MODE = 2;
     RecyclerView recyclerView;
     StepAdapter adapter;
     Context context;
@@ -50,18 +49,18 @@ public class StepFragment extends Fragment {
         recyclerView = view.findViewById(R.id.step_list);
         adapter = new StepAdapter(context);
         Bundle bundle = getArguments();
-        if (bundle.getBoolean(IS_LAND)){
+        if (bundle.getInt(MODE) == LANDSCAPE_MODE){
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setAdapter(adapter);
 
-        } else if (bundle.getInt(TABLET_MODE) == TABLET_LAND_MODE) {
+        } else if (bundle.getInt(MODE) == TABLET_LAND_MODE) {
             adapter.setMode(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
 
-        } else{
+        } else if (bundle.getInt(MODE) == PORTRAIT_MODE){
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
@@ -73,9 +72,11 @@ public class StepFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
-        List<Step> steps = bundle.getParcelableArrayList("steps_list");
-        List<Ingredient> ingredients = bundle.getParcelableArrayList("ingredients_list");
-        adapter.loadSteps(steps);
-        adapter.setIngredients(ingredients);
+        Recipe recipe = bundle.getParcelable(RECIPE_KEY);
+        if (recipe != null) {
+            adapter.loadSteps(recipe.getSteps());
+            adapter.setIngredients(recipe.getIngredients());
+            adapter.loadRecipe(recipe);
+        }
     }
 }

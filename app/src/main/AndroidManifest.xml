@@ -3,7 +3,7 @@
     package="com.example.raed.thecook">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -41,6 +41,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.raed.thecook.stepActivity.StepActivity" />
         </activity>
+
+        <provider
+            android:name=".data.local.RecipeContentProvider"
+            android:authorities="com.example.raed.thecook"
+            android:exported="true" />
+
+        <receiver android:name=".widget.CookWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/cook_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.IngredientListService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <service android:name=".widget.IngredientService"/>
     </application>
 
 </manifest>

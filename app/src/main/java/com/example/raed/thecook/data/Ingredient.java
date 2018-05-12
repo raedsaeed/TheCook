@@ -17,13 +17,15 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "ingredient", foreignKeys = @ForeignKey(entity = Recipe.class,
         parentColumns = "id",
         childColumns = "recipeId", onDelete = CASCADE),
-        indices = @Index(value = "recipeId",unique = true))
+        indices = @Index(value = "recipeId", unique = true))
 public class Ingredient implements Parcelable {
     @PrimaryKey
     private double quantity;
     private String measure;
     private String ingredient;
     private int recipeId;
+    private boolean isFavorite;
+    private String recipeName;
 
     public Ingredient(double quantity, String measure, String ingredient) {
         this.quantity = quantity;
@@ -31,7 +33,9 @@ public class Ingredient implements Parcelable {
         this.ingredient = ingredient;
     }
 
+
     private Ingredient(Parcel parcel) {
+
         quantity = parcel.readDouble();
         measure = parcel.readString();
         ingredient = parcel.readString();
@@ -65,8 +69,24 @@ public class Ingredient implements Parcelable {
         return recipeId;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public String getRecipeName() {
+        return recipeName;
+    }
+
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
     }
 
     @Override

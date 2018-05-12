@@ -7,4 +7,6 @@
     <string name="no_connection">No Connection!! Please Check your WiFi!</string>
     <string name="ingredient">Ingredients</string>
     <string name="empty_ingredient">No Ingredient Found</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

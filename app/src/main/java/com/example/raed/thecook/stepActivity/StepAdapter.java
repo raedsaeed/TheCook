@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.raed.thecook.R;
 import com.example.raed.thecook.data.Ingredient;
+import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.data.Step;
 import com.example.raed.thecook.detailActivity.DetailActivity;
 import com.example.raed.thecook.detailActivity.IngredientDetailFragment;
@@ -30,6 +31,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
     private Context context;
     private List<Step> stepList;
     private List<Ingredient> ingredients;
+    private Recipe recipe;
     private boolean tabTwoPane = false;
 
     public StepAdapter(Context context) {
@@ -58,6 +60,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
     public void loadSteps(List<Step> steps) {
         this.stepList = steps;
         notifyDataSetChanged();
+    }
+
+    public void loadRecipe (Recipe recipe) {
+        this.recipe = recipe;
     }
 
     public void setMode(boolean isTwoPane) {
@@ -107,6 +113,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra(DetailActivity.EXTRA_STEP, step);
                 intent.putParcelableArrayListExtra(DetailActivity.EXTRA_INGREDIENT, (ArrayList<Ingredient>) ingredients);
+                intent.putExtra(DetailActivity.EXTRA_RECIPE_NAME, recipe.getName());
                 context.startActivity(intent);
             }
         }

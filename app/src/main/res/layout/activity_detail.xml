@@ -41,8 +41,22 @@
                 android:id="@+id/ingredient_list_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <!--<include layout="@layout/detail_video_part"/>-->
+            <!--<include layout="@layout/detail_ingredient_part"/>-->
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:focusable="true"
+        app:layout_behavior="com.example.raed.thecook.FabBehavior"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_launcher_background"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
