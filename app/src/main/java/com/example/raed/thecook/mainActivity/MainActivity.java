@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showData(List<Recipe> recipes) {
+        Log.d(TAG, "showData: Got data");
         RecipeFragment recipeFragment = new RecipeFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipes);

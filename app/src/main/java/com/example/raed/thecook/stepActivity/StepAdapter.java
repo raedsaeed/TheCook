@@ -113,7 +113,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra(DetailActivity.EXTRA_STEP, step);
                 intent.putParcelableArrayListExtra(DetailActivity.EXTRA_INGREDIENT, (ArrayList<Ingredient>) ingredients);
-                intent.putExtra(DetailActivity.EXTRA_RECIPE_NAME, recipe.getName());
+                intent.putExtra(DetailActivity.EXTRA_RECIPE_NAME, recipe);
                 context.startActivity(intent);
             }
         }

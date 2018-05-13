@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 
+import static com.example.raed.thecook.data.local.RecipeContract.RecipeEntry.INGREDIENT;
+import static com.example.raed.thecook.data.local.RecipeContract.RecipeEntry.QUANTITY;
+import static com.example.raed.thecook.data.local.RecipeContract.RecipeEntry.RECIPE_ID;
 import static com.example.raed.thecook.data.local.RecipeContract.RecipeEntry.TABLE_NAME;
 
 /**
@@ -26,7 +29,8 @@ public class RecipeDbHelper extends SQLiteOpenHelper {
                 RecipeContract.RecipeEntry.RECIPE_NAME + " TEXT NOT NULL, " +
                 RecipeContract.RecipeEntry.INGREDIENT + " TEXT NOT NULL, " +
                 RecipeContract.RecipeEntry.MEASURE + " TEXT NOT NULL, " +
-                RecipeContract.RecipeEntry.QUANTITY + " REAL NOT NULL )";
+                RecipeContract.RecipeEntry.QUANTITY + " REAL NOT NULL," +
+                "UNIQUE ("+INGREDIENT+", "+QUANTITY+") ON CONFLICT REPLACE )";
 
         sqLiteDatabase.execSQL(SQL_CREATE_PLANTS_TABLE);
     }
