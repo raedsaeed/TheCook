@@ -8,12 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.raed.thecook.R;
+import com.example.raed.thecook.SimpleIdlingResource;
 import com.example.raed.thecook.data.Recipe;
 
 public class StepActivity extends AppCompatActivity {
     private static final String TAG = "StepActivity";
     public static String EXTRA_RECIPE = "recipe_object";
-
+    private SimpleIdlingResource idlingResource;
     private Recipe recipe;
 
     @Override
@@ -77,5 +78,12 @@ public class StepActivity extends AppCompatActivity {
         manager.beginTransaction()
                 .replace(R.id.tablet_land_step_holder, fragment)
                 .commit();
+    }
+
+    public SimpleIdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 }

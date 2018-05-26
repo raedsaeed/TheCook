@@ -7,6 +7,9 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.example.raed.thecook.RecyclerViewHelpers.CustomViewAction;
 import com.example.raed.thecook.RecyclerViewHelpers.RecyclerViewMatcher;
@@ -14,6 +17,9 @@ import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.mainActivity.MainActivity;
 import com.example.raed.thecook.mainActivity.RecipeFragment;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,6 +33,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -56,13 +63,11 @@ public class MainActivityTest {
 
     @Before
     public void checkFragment () {
-//        activityTestRule.getActivity().startDownloadForTesting();
         Recipe recipe = new Recipe(0, "Test pie", 8, null);
         recipeList.add(recipe);
         Bundle bundle = new Bundle();
 
         if (activityTestRule.getActivity().findViewById(R.id.recipe_part_holder) != null) {
-//            this.recipeList = activityTestRule.getActivity().getRecipes();
             bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipeList);
             bundle.putBoolean("isTablet", false);
             RecipeFragment recipeFragment = new RecipeFragment();
@@ -71,7 +76,6 @@ public class MainActivityTest {
                     .beginTransaction().replace(R.id.recipe_part_holder, recipeFragment)
                     .commit();
         }else {
-//            this.recipeList = activityTestRule.getActivity().getRecipes();
             bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipeList);
             bundle.putBoolean("isTablet", true);
             RecipeFragment recipeFragment = new RecipeFragment();
@@ -84,8 +88,11 @@ public class MainActivityTest {
 
     @Test
     public void isRecyclerViewClickable () {
-        onView(withId(R.id.recipe_list))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withRecyclerView(R.id.recipe_list).atPositionOnView(0, R.id.recipe_name))
+                .check(matches(withText("Test pie")));
+
+        onView(withRecyclerView(R.id.recipe_list).atPosition(0))
+                .perform(click());
     }
 
     @After

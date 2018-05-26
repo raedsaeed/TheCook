@@ -51,7 +51,9 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializePlayer(Uri.parse(getArguments().getString(URI_KEY)));
+        if (getArguments().getString(URI_KEY)!= null) {
+            initializePlayer(Uri.parse(getArguments().getString(URI_KEY)));
+        }
     }
 
     @Override
