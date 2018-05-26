@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.raed.thecook.R;
+import com.example.raed.thecook.SimpleIdlingResource;
 import com.example.raed.thecook.data.Recipe;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     RecipeAdapter adapter;
     MainPresenter presenter;
     boolean tabletMode = false;
+    private SimpleIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,5 +124,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 //                    throw new IllegalArgumentException("Wrong Id");
 //
 //        }
+    }
+
+    public SimpleIdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 }

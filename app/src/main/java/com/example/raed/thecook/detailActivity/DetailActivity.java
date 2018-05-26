@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.raed.thecook.R;
 import com.example.raed.thecook.data.Ingredient;
@@ -99,7 +100,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         int id = recipe.getId();
-        Log.d(TAG, "onClick: " +id);
         for (Ingredient ingredient : ingredients) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(RecipeContract.RecipeEntry.INGREDIENT, ingredient.getIngredient());
@@ -110,5 +110,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             getContentResolver().insert(RecipeContract.RecipeEntry.CONTENT_URI, contentValues);
         }
         IngredientService.startActionUpdateWidget(this, recipe);
+        Toast.makeText(this, "Added to favourite ", Toast.LENGTH_SHORT).show();
     }
 }
