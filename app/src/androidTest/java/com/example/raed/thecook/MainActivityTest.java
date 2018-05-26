@@ -1,25 +1,17 @@
 package com.example.raed.thecook;
 
+import android.app.Instrumentation;
 import android.os.Bundle;
 import android.support.test.espresso.IdlingRegistry;
-import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
-import com.example.raed.thecook.RecyclerViewHelpers.CustomViewAction;
 import com.example.raed.thecook.RecyclerViewHelpers.RecyclerViewMatcher;
 import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.mainActivity.MainActivity;
 import com.example.raed.thecook.mainActivity.RecipeFragment;
+import com.example.raed.thecook.stepActivity.StepActivity;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,13 +21,17 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by raed on 5/25/18.
@@ -43,9 +39,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
-    private static final String TAG = "MainActivityTest";
     @Rule
-    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> intentsTestRule = new IntentsTestRule<>(MainActivity.class);
 
     private SimpleIdlingResource idlingResource;
 
@@ -56,8 +51,13 @@ public class MainActivityTest {
     }
 
     @Before
+    public void stubAllExternalIntents() {
+        intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(RESULT_OK, null));
+    }
+    
+    @Before
     public void registerIdlingResource () {
-        idlingResource = activityTestRule.getActivity().getIdlingResource();
+        idlingResource = intentsTestRule.getActivity().getIdlingResource();
         IdlingRegistry.getInstance().register(idlingResource);
     }
 
@@ -67,19 +67,19 @@ public class MainActivityTest {
         recipeList.add(recipe);
         Bundle bundle = new Bundle();
 
-        if (activityTestRule.getActivity().findViewById(R.id.recipe_part_holder) != null) {
+        if (intentsTestRule.getActivity().findViewById(R.id.recipe_part_holder) != null) {
             bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipeList);
             bundle.putBoolean("isTablet", false);
             RecipeFragment recipeFragment = new RecipeFragment();
             recipeFragment.setArguments(bundle);
-            activityTestRule.getActivity().getSupportFragmentManager()
+            intentsTestRule.getActivity().getSupportFragmentManager()
                     .beginTransaction().replace(R.id.recipe_part_holder, recipeFragment)
                     .commit();
         }else {
             bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipeList);
             bundle.putBoolean("isTablet", true);
             RecipeFragment recipeFragment = new RecipeFragment();
-            activityTestRule.getActivity().getSupportFragmentManager()
+            intentsTestRule.getActivity().getSupportFragmentManager()
                     .beginTransaction().replace(R.id.tablet_recipe_part_holder, recipeFragment)
                     .commit();
         }
@@ -95,10 +95,19 @@ public class MainActivityTest {
                 .perform(click());
     }
 
+    @Test
+    public void clickSendRecipes () {
+        onView(withRecyclerView(R.id.recipe_list).atPositionOnView(0, R.id.recipe_name))
+                .perform(click());
+
+        intended(allOf(
+                hasExtra(StepActivity.EXTRA_RECIPE, recipeList.get(0))));
+    }
+
     @After
     public void unRegisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(idlingResource);
-        activityTestRule.getActivity().finish();
+        intentsTestRule.getActivity().finish();
     }
 
 }
