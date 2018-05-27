@@ -3,6 +3,7 @@ package com.example.raed.thecook.detailActivity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.raed.thecook.R;
+import com.example.raed.thecook.SimpleIdlingResource;
 import com.example.raed.thecook.data.Ingredient;
 import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.data.Step;
@@ -33,6 +35,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     Recipe recipe;
     boolean isTwoPane = false;
     Intent intent;
+    private SimpleIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 showInPortrait();
             }
              recipe = intent.getParcelableExtra(EXTRA_RECIPE_NAME);
-            actionBar.setTitle(recipe.getName());
+            if (recipe != null) {
+                actionBar.setTitle(recipe.getName());
+            }
         }
 
     }
@@ -68,7 +73,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         FragmentManager manager = getSupportFragmentManager();
         Player player = new Player();
         Bundle bundle = new Bundle();
-        bundle.putString("uri", step.getVideoURL());
+        if (step != null) {
+            bundle.putString("uri", step.getVideoURL());
+        }
         player.setArguments(bundle);
         manager.beginTransaction()
                 .replace(R.id.land_player_holder, player)
@@ -81,7 +88,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         FragmentManager manager = getSupportFragmentManager();
         Player player = new Player();
         Bundle bundle = new Bundle();
-        bundle.putString("uri", step.getVideoURL());
+        if (step != null) {
+            bundle.putString("uri", step.getVideoURL());
+        }
         player.setArguments(bundle);
         manager.beginTransaction()
                 .replace(R.id.video_part_holder, player)
@@ -111,5 +120,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         IngredientService.startActionUpdateWidget(this, recipe);
         Toast.makeText(this, "Added to favourite ", Toast.LENGTH_SHORT).show();
+    }
+
+    public SimpleIdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
     }
 }
