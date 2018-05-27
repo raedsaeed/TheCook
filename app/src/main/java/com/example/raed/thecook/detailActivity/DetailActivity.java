@@ -108,6 +108,9 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        if (recipe == null) {
+            return;
+        }
         int id = recipe.getId();
         for (Ingredient ingredient : ingredients) {
             ContentValues contentValues = new ContentValues();

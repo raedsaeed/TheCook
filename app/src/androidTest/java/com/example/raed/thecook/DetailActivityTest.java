@@ -12,7 +12,9 @@ import com.example.raed.thecook.data.Ingredient;
 import com.example.raed.thecook.detailActivity.DetailActivity;
 import com.example.raed.thecook.detailActivity.IngredientDetailFragment;
 import com.example.raed.thecook.detailActivity.Player;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,8 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 
 
 /**
@@ -39,6 +45,7 @@ public class DetailActivityTest {
     private SimpleIdlingResource idlingResource;
     private String fakeUrl = "http://something.come";
     private List<Ingredient> ingredients;
+    private boolean landMode = false;
 
     public RecyclerViewMatcher withRecyclerView (int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
@@ -51,6 +58,7 @@ public class DetailActivityTest {
         ingredients = createFakeIngredient();
         if (activity.findViewById(R.id.land_player_holder) != null) {
             showInLandScape();
+            landMode = true;
         }else {
             showInPortrait();
         }
@@ -64,6 +72,9 @@ public class DetailActivityTest {
 
     @Test
     public void checkIngredientList() {
+        if (landMode) {
+            return;
+        }
         onView(withRecyclerView(R.id.ingredients_list).atPositionOnView(0, R.id.quantity))
                 .check(matches(withText("3.0")));
 
@@ -72,6 +83,20 @@ public class DetailActivityTest {
 
         onView(withRecyclerView(R.id.ingredients_list).atPositionOnView(0, R.id.ingredient))
                 .check(matches(withText("Sugar")));
+    }
+
+    @Test
+    public void clickFavButton () {
+        if (landMode) {
+            return;
+        }
+        onView(withId(R.id.fab)).perform(click());
+    }
+
+    @Test
+    public void checkExoPlayer () {
+        onView(AllOf.allOf(withId(R.id.exo_play),
+                withClassName(is(SimpleExoPlayerView.class.getName()))));
     }
 
     @After
