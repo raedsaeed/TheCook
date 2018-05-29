@@ -16,6 +16,7 @@ public class StepActivity extends AppCompatActivity {
     public static String EXTRA_RECIPE = "recipe_object";
     private SimpleIdlingResource idlingResource;
     private Recipe recipe;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,9 @@ public class StepActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        intent = getIntent();
+        recipe = intent.getParcelableExtra(EXTRA_RECIPE);
+
         if (findViewById(R.id.land_step_list_holder) != null) {
             showInLandscape();
         }else if (findViewById(R.id.tablet_land_step_holder) != null) {
@@ -38,8 +42,6 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void showInLandscape() {
-        Intent intent = getIntent();
-        recipe = intent.getParcelableExtra(EXTRA_RECIPE);
         FragmentManager manager = getSupportFragmentManager();
         StepFragment fragment = new StepFragment();
         Bundle bundle = new Bundle();
@@ -52,8 +54,6 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void showInPortrait () {
-        Intent intent = getIntent();
-        recipe = intent.getParcelableExtra(EXTRA_RECIPE);
         FragmentManager manager = getSupportFragmentManager();
         StepFragment fragment = new StepFragment();
         Bundle bundle = new Bundle();
@@ -67,8 +67,6 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void showInTabletLand () {
-        Intent intent = getIntent();
-        recipe = intent.getParcelableExtra(EXTRA_RECIPE);
         FragmentManager manager = getSupportFragmentManager();
         StepFragment fragment = new StepFragment();
         Bundle bundle = new Bundle();

@@ -63,7 +63,7 @@ public class MainActivityTest {
 
     @Before
     public void checkFragment () {
-        Recipe recipe = new Recipe(0, "Test pie", 8, null);
+        Recipe recipe = new Recipe(0, "Nutella Pie", 8, null);
         recipeList.add(recipe);
         Bundle bundle = new Bundle();
 
@@ -74,14 +74,15 @@ public class MainActivityTest {
             recipeFragment.setArguments(bundle);
             intentsTestRule.getActivity().getSupportFragmentManager()
                     .beginTransaction().replace(R.id.recipe_part_holder, recipeFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }else {
             bundle.putParcelableArrayList("recipeList", (ArrayList<Recipe>) recipeList);
             bundle.putBoolean("isTablet", true);
             RecipeFragment recipeFragment = new RecipeFragment();
+            recipeFragment.setArguments(bundle);
             intentsTestRule.getActivity().getSupportFragmentManager()
                     .beginTransaction().replace(R.id.tablet_recipe_part_holder, recipeFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
 
     }
@@ -89,7 +90,7 @@ public class MainActivityTest {
     @Test
     public void isRecyclerViewClickable () {
         onView(withRecyclerView(R.id.recipe_list).atPositionOnView(0, R.id.recipe_name))
-                .check(matches(withText("Test pie")));
+                .check(matches(withText("Nutella Pie")));
 
         onView(withRecyclerView(R.id.recipe_list).atPosition(0))
                 .perform(click());

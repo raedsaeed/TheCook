@@ -87,11 +87,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (!tabletMode) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.recipe_part_holder, recipeFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.tablet_recipe_part_holder, recipeFragment)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 

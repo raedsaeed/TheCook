@@ -13,7 +13,9 @@ import com.example.raed.thecook.data.Step;
 import com.example.raed.thecook.detailActivity.DetailActivity;
 import com.example.raed.thecook.stepActivity.StepActivity;
 import com.example.raed.thecook.stepActivity.StepFragment;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
+import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,7 +33,10 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsNot.not;
 
@@ -48,6 +53,7 @@ public class StepActivityTest {
     private SimpleIdlingResource idlingResource;
 
     private Recipe recipe;
+    private boolean tabletLandMode = false;
 
     public RecyclerViewMatcher withRecyclerView (int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
@@ -71,6 +77,7 @@ public class StepActivityTest {
             showInLandscape();
         }else if (intentsTestRule.getActivity().findViewById(R.id.tablet_land_step_holder) != null) {
             showInTabletLand();
+            tabletLandMode = true;
         } else{
             showInPortrait();
         }
@@ -90,6 +97,11 @@ public class StepActivityTest {
         onView(withRecyclerView(R.id.step_list).atPositionOnView(0, R.id.step_short_description))
                 .perform(click());
 
+        if(tabletLandMode) {
+            onView(AllOf.allOf(withId(R.id.exo_play),
+                    withClassName(is(SimpleExoPlayerView.class.getName()))));
+            return;
+        }
         intended(allOf(
                 hasExtra(DetailActivity.EXTRA_STEP, recipe.getSteps().get(0))));
 
