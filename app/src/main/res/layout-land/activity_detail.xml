@@ -7,7 +7,7 @@
     tools:context="com.example.raed.thecook.detailActivity.DetailActivity">
 
     <FrameLayout
-        android:id="@+id/land_player_holder"
+        android:id="@+id/video_part_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

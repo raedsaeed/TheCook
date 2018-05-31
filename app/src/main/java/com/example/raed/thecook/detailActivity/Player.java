@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.raed.thecook.R;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -37,8 +38,13 @@ import com.google.android.exoplayer2.util.Util;
 public class Player extends Fragment implements ExoPlayer.EventListener {
     private static final String TAG = "Player";
     public static final String URI_KEY = "uri";
+    private static final String POSITION_KEY = "position";
+    private static final String PLAY_KEY = "play_when_ready";
     private SimpleExoPlayerView playerView;
     private SimpleExoPlayer player;
+    private Uri videoUri;
+    private long player_position;
+    private boolean player_state = true;
 
     @Nullable
     @Override
@@ -51,8 +57,14 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            player_position = savedInstanceState.getLong(POSITION_KEY);
+            player_state = savedInstanceState.getBoolean(PLAY_KEY);
+        }
+
         if (getArguments().getString(URI_KEY)!= null) {
-            initializePlayer(Uri.parse(getArguments().getString(URI_KEY)));
+            videoUri = Uri.parse(getArguments().getString(URI_KEY));
+            initializePlayer(videoUri);
         }
     }
 
@@ -99,7 +111,10 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
                     null,
                     null);
             player.prepare(mediaSource);
-            player.setPlayWhenReady(true);
+            player.setPlayWhenReady(player_state);
+            if (player_position != C.TIME_UNSET){
+                player.seekTo(player_position);
+            }
 
         }
     }
@@ -111,9 +126,43 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if(Util.SDK_INT > 23) {
+            initializePlayer(videoUri);
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(Util.SDK_INT < 24 || player == null) {
+            initializePlayer(videoUri);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        player_position = player.getCurrentPosition();
+        player_state = player.getPlayWhenReady();
+        outState.putLong(POSITION_KEY, player_position);
+        outState.putBoolean(PLAY_KEY, player_state);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
-        if (player != null) {
+        if (Util.SDK_INT > 23 || player != null) {
             releasePlayer();
             Log.d(TAG, "onStop: Called");
         }

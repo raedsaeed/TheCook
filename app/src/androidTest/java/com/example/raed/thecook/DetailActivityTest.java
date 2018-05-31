@@ -56,7 +56,7 @@ public class DetailActivityTest {
     public void checkOrientation () {
         Activity activity = activityTestRule.getActivity();
         ingredients = createFakeIngredient();
-        if (activity.findViewById(R.id.land_player_holder) != null) {
+        if (activity.findViewById(R.id.video_part_holder) != null) {
             showInLandScape();
             landMode = true;
         }else {
@@ -111,7 +111,7 @@ public class DetailActivityTest {
         bundle.putString("uri", fakeUrl);
         player.setArguments(bundle);
         manager.beginTransaction()
-                .replace(R.id.land_player_holder, player)
+                .replace(R.id.video_part_holder, player)
                 .commit();
     }
 

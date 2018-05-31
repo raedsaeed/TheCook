@@ -3,7 +3,6 @@ package com.example.raed.thecook.detailActivity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,17 +34,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     Recipe recipe;
     boolean isTwoPane = false;
     Intent intent;
+    ActionBar actionBar;
     private SimpleIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
+
+        if (findViewById(R.id.toolbar) != null) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
+
         }
 
         if (findViewById(R.id.fab) != null) {
@@ -54,36 +56,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         intent = getIntent();
-        if (intent != null) {
-            if (findViewById(R.id.land_player_holder) != null) {
-                showInLandScape();
-            } else {
-                showInPortrait();
+        if (savedInstanceState == null) {
+            if (findViewById(R.id.ingredient_list_holder) != null) {
+                loadIngredientListFragment();
+                recipe = intent.getParcelableExtra(EXTRA_RECIPE_NAME);
+                if (recipe != null) {
+                    actionBar.setTitle(recipe.getName());
+                }
             }
-             recipe = intent.getParcelableExtra(EXTRA_RECIPE_NAME);
-            if (recipe != null) {
-                actionBar.setTitle(recipe.getName());
-            }
+            loadPlayerFragment();
         }
 
     }
 
-    private void showInLandScape() {
-        step = intent.getParcelableExtra(EXTRA_STEP);
-        FragmentManager manager = getSupportFragmentManager();
-        Player player = new Player();
-        Bundle bundle = new Bundle();
-        if (step != null) {
-            bundle.putString("uri", step.getVideoURL());
-        }
-        player.setArguments(bundle);
-        manager.beginTransaction()
-                .replace(R.id.land_player_holder, player)
-                .commit();
-    }
-
-    private void showInPortrait (){
-        ingredients = intent.getParcelableArrayListExtra(EXTRA_INGREDIENT);
+    private void loadPlayerFragment () {
         step = intent.getParcelableExtra(EXTRA_STEP);
         FragmentManager manager = getSupportFragmentManager();
         Player player = new Player();
@@ -95,9 +81,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         manager.beginTransaction()
                 .replace(R.id.video_part_holder, player)
                 .commit();
+    }
 
-
+    private void loadIngredientListFragment() {
+        ingredients = intent.getParcelableArrayListExtra(EXTRA_INGREDIENT);
         IngredientDetailFragment ingredientsDetails = new IngredientDetailFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("ingredients", (ArrayList<Ingredient>) ingredients);
         bundle.putParcelable("step", step);
         ingredientsDetails.setArguments(bundle);
@@ -105,6 +95,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 .replace(R.id.ingredient_list_holder, ingredientsDetails)
                 .commit();
     }
+
 
     @Override
     public void onClick(View view) {

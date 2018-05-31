@@ -2,13 +2,16 @@ package com.example.raed.thecook.stepActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.raed.thecook.R;
@@ -40,7 +43,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
 
     @Override
     public StepsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.step_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.step_video_item, parent, false);
         return new StepsViewHolder(view);
     }
 
@@ -48,6 +51,9 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
     public void onBindViewHolder(StepsViewHolder holder, int position) {
         Step step = stepList.get(position);
         if (step != null) {
+            if (step.getVideoURL().length() ==0 ) {
+                holder.videoView.setVisibility(View.GONE);
+            }
             holder.stepDescription.setText(step.getShortDescription());
         }
     }
@@ -76,10 +82,13 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView stepDescription;
+        ImageView videoView;
 
         public StepsViewHolder(View itemView) {
             super(itemView);
-            stepDescription = (itemView).findViewById(R.id.step_short_description);
+            stepDescription = (itemView).findViewById(R.id.second_step_short_description);
+            videoView = (itemView).findViewById(R.id.video_icon);
+            videoView.setOnClickListener(this);
             stepDescription.setOnClickListener(this);
         }
 
