@@ -23,6 +23,8 @@ import com.example.raed.thecook.widget.IngredientService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.raed.thecook.detailActivity.Player.STEP_KEY;
+
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "DetailActivity";
     public static final String EXTRA_STEP = "step";
@@ -75,7 +77,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         Player player = new Player();
         Bundle bundle = new Bundle();
         if (step != null) {
-            bundle.putString("uri", step.getVideoURL());
+            bundle.putParcelable(STEP_KEY, step);
         }
         player.setArguments(bundle);
         manager.beginTransaction()

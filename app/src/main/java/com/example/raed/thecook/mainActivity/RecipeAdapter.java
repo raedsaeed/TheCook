@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.raed.thecook.R;
 import com.example.raed.thecook.data.Recipe;
 import com.example.raed.thecook.stepActivity.StepActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -38,6 +39,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeItem
         if (recipeList != null) {
             Recipe recipe = recipeList.get(position);
             holder.recipeName.setText(recipe.getName());
+            String imageUri = recipe.getImage();
+            if (imageUri.length() != 0) {
+                Picasso.with(context)
+                        .load(imageUri)
+                        .placeholder(R.drawable.error_image)
+                        .error(R.drawable.error_image)
+                        .into(holder.recipeImage);
+            }else {
+                Picasso.with(context)
+                        .load(R.drawable.error_image)
+                        .into(holder.recipeImage);
+            }
         }
     }
 

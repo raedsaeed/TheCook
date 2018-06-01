@@ -1,7 +1,5 @@
 package com.example.raed.thecook.detailActivity;
 
-import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.raed.thecook.R;
+import com.example.raed.thecook.data.Step;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by raed on 4/29/18.
@@ -37,11 +38,12 @@ import com.google.android.exoplayer2.util.Util;
 
 public class Player extends Fragment implements ExoPlayer.EventListener {
     private static final String TAG = "Player";
-    public static final String URI_KEY = "uri";
+    public static final String STEP_KEY = "step";
     private static final String POSITION_KEY = "position";
     private static final String PLAY_KEY = "play_when_ready";
     private SimpleExoPlayerView playerView;
     private SimpleExoPlayer player;
+    private ImageView stepThumbnail;
     private Uri videoUri;
     private long player_position;
     private boolean player_state = true;
@@ -51,6 +53,7 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_video_part, container, false);
         playerView = (SimpleExoPlayerView) view.findViewById(R.id.video_view);
+        stepThumbnail = (ImageView)view.findViewById(R.id.step_thumbnail);
         return view;
     }
 
@@ -62,9 +65,19 @@ public class Player extends Fragment implements ExoPlayer.EventListener {
             player_state = savedInstanceState.getBoolean(PLAY_KEY);
         }
 
-        if (getArguments().getString(URI_KEY)!= null) {
-            videoUri = Uri.parse(getArguments().getString(URI_KEY));
+        Step step = getArguments().getParcelable(STEP_KEY);
+        if (step != null) {
+            videoUri = Uri.parse(step.getVideoURL());
             initializePlayer(videoUri);
+            if (step.getThumbnailURL().length() != 0){
+                Picasso.with(getContext())
+                        .load(step.getThumbnailURL())
+                        .placeholder(R.drawable.error_image)
+                        .error(R.drawable.error_image)
+                        .into(stepThumbnail);
+            }else {
+                stepThumbnail.setVisibility(View.GONE);
+            }
         }
     }
 
